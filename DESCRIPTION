@@ -1,4 +1,4 @@
-Package: tidygenomics2022LoveMangiola
+Package: LoveMangiola2022tidytranscriptomics
 Title: Introduction to Tidy Transcriptomics
 Version: 0.12.0
 Authors@R: c(
@@ -50,6 +50,6 @@ Suggests:
 Remotes: satijalab/seurat-wrappers
 Biarch: true
 biocViews: RNASeq, DifferentialExpression, GeneExpression, Normalization, Clustering, QualityControl, Sequencing, SingleCell, Transcription, Transcriptomics
-URL: https://tidytranscriptomics-workshops.github.io/tidygenomics2022_Love_Mangiola/
-BugReports: https://github.com/tidytranscriptomics-workshops/tidygenomics2022_Love_Mangiola/issues/new/choose
+URL: https://tidytranscriptomics-workshops.github.io/LoveMangiola2022_tidytranscriptomics/
+BugReports: https://github.com/tidytranscriptomics-workshops/LoveMangiola2022_tidytranscriptomics/issues/new/choose
 VignetteBuilder: knitr

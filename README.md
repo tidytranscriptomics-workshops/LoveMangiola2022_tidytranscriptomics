@@ -16,7 +16,7 @@
 
 ## Syllabus
 
-Material [web page](https://tidytranscriptomics-workshops.github.io/tidygenomics2022_Love_Mangiola/articles/tidytranscriptomics_case_study.html).
+Material [web page](https://tidytranscriptomics-workshops.github.io/LoveMangiola2022_tidytranscriptomics/articles/tidytranscriptomics_case_study.html).
 
 More details on the workshop are below.
 
@@ -37,14 +37,14 @@ remotes::install_github(c("stemangiola/tidyseurat@v0.4.0", "stemangiola/tidySing
 
 # Install workshop package
 
-remotes::install_github("tidytranscriptomics-workshops/tidygenomics2022_Love_Mangiola", build_vignettes = TRUE)
+remotes::install_github("tidytranscriptomics-workshops/LoveMangiola2022_tidytranscriptomics", build_vignettes = TRUE)
 
 # To view vignettes
-library(tidygenomics2022LoveMangiola)
-browseVignettes("tidygenomics2022LoveMangiola")
+library(LoveMangiola2022tidytranscriptomics)
+browseVignettes("LoveMangiola2022tidytranscriptomics")
 ```
 
-To run the code, you could then copy and paste the code from the workshop vignette or [R markdown file](https://raw.githubusercontent.com/tidytranscriptomics-workshops/tidygenomics2022_Love_Mangiola/master/vignettes/tidytranscriptomics.Rmd) into a new R Markdown file on your computer.
+To run the code, you could then copy and paste the code from the workshop vignette or [R markdown file](https://raw.githubusercontent.com/tidytranscriptomics-workshops/LoveMangiola2022_tidytranscriptomics/master/vignettes/tidytranscriptomics.Rmd) into a new R Markdown file on your computer.
 
 ## Workshop Description
 

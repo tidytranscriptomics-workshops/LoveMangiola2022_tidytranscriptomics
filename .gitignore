@@ -10,3 +10,6 @@ iscb2021tidytranscriptomics*.tgz
 dev
 /doc/
 /Meta/
+._.DS_Store
+.DS_Store
+_pkgdown.yml

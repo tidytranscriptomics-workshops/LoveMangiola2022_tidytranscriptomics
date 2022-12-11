@@ -6,7 +6,7 @@ seurat_obj_UMAP3[["RNA"]] = NULL
 seurat_obj_UMAP3[["SCT"]] = NULL
 seurat_obj_UMAP3 = seurat_obj_UMAP3[1,] 
 
-seurat_obj_UMAP3 %>% saveRDS("~/PostDoc/workshops/tidygenomics2022_Love_Mangiola/dev/seurat_obj_UMAP3.rds", compress = "xz")
+seurat_obj_UMAP3 %>% saveRDS("~/PostDoc/workshops/LoveMangiola2022_tidytranscriptomics/dev/seurat_obj_UMAP3.rds", compress = "xz")
 save(seurat_obj_UMAP3, file="data/seurat_obj_UMAP3.rda", compress = "xz")
 
 

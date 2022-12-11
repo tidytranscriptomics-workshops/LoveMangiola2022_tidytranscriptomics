@@ -2,7 +2,7 @@ on: [push]
 
 env:
   cache-version: v1
-  repo-name: tidytranscriptomics-workshops/tidygenomics2022_Love_Mangiola
+  repo-name: tidytranscriptomics-workshops/LoveMangiola2022_tidytranscriptomics
   GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }} 
 
 jobs:
