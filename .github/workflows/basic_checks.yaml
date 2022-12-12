@@ -14,8 +14,10 @@ jobs:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10' 
       - name: Query dependencies and update old packages
         run: |
           # We'll install the specific versions needed
@@ -91,7 +93,7 @@ jobs:
       id-token: write
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set Environment Variables
         run: |
