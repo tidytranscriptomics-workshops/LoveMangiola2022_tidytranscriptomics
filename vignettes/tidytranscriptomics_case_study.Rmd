@@ -446,7 +446,6 @@ To create pseudobulk samples from the single cell samples, we will use a helper 
 library(glue)
 library(tidyr)
 library(purrr)
-library(patchwork)
 
 # bulk RNA-seq libraries
 library(tidybulk)

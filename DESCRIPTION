@@ -40,7 +40,10 @@ Imports:
     rlang,
     magrittr,
     R.utils,
-    dittoSeq
+    dittoSeq,
+    tidybulk,
+    tidySummarizedExperiment,
+    glue
 Suggests:
     knitr,
     rmarkdown,
