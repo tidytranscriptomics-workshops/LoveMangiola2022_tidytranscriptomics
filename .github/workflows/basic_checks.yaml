@@ -4,6 +4,8 @@ env:
   cache-version: v4
   repo-name: tidytranscriptomics-workshops/LoveMangiola2022_tidytranscriptomics
 
+
+    
 jobs:
   r-build-and-check:
     runs-on: ubuntu-latest
@@ -13,13 +15,13 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v2
-
+      - uses: actions/setup-python@v4
       - name: Query dependencies and update old packages
         run: |
           # We'll install the specific versions needed
-          BiocManager::install("stemangiola/tidySingleCellExperiment@v1.7.4")
-          BiocManager::install("stemangiola/tidySummarizedExperiment@v1.7.3")
-          BiocManager::install("stemangiola/tidybulk@v1.9.2")
+          BiocManager::install("stemangiola/tidySingleCellExperiment@v1.9.1")
+          BiocManager::install("stemangiola/tidySummarizedExperiment@v1.9.1")
+          BiocManager::install("stemangiola/tidybulk@v1.11.1")
           
           # Then install the other dependencies in the usual way
           BiocManager::install(ask=FALSE)
