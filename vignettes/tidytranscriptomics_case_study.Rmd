@@ -4,7 +4,7 @@ author:
   - Maria Doyle, Peter MacCallum Cancer Centre^[<maria.doyle at petermac.org>]
   - Stefano Mangiola, Walter and Eliza Hall Institute^[<mangiola.s at wehi.edu.au>]
 output: rmarkdown::html_vignette
-bibliography: "`r file.path(system.file(package='iscb2022tidytranscriptomics', 'vignettes'), 'tidytranscriptomics.bib')`"
+bibliography: "`r file.path(system.file(package='LoveMangiola2022tidytranscriptomics', 'vignettes'), 'tidytranscriptomics.bib')`"
 vignette: >
   %\VignetteIndexEntry{Tidy Transcriptomics for Single-cell RNA Sequencing Analyses}
   %\VignetteEngine{knitr::rmarkdown}
@@ -43,18 +43,18 @@ knitr::opts_chunk$set(echo = TRUE)
 Easiest way to run this material. Only available during workshop. Many thanks to the Australian Research Data Commons (ARDC) for providing RStudio in the Australian Nectar Research Cloud and Andy Botting from ARDC for helping to set up.
 
 -   Login to one of the servers (e.g. <https://rstudio5.tidytranscriptomics-workshop.cloud.edu.au/rstudio/>) with one of the usernames and passwords from the spreadsheet provided at the workshop. Add your name into the spreadsheet beside the login you're using.
--   Open `tidytranscriptomics_case_study.Rmd` in `iscb2022_tidytranscriptomcs/vignettes` folder
+-   Open `tidytranscriptomics_case_study.Rmd` in `LoveMangiola2022_tidytranscriptomcs/vignettes` folder
 
 ### Local
 
-We will use the Cloud during the ISCB workshop and this method is available if you want to run the material after the workshop. If you want to install on your own computer, see instructions [here](https://tidytranscriptomics-workshops.github.io/iscb2022_tidytranscriptomics/index.html#workshop-package-installation).
+We will use the Cloud during the ISCB workshop and this method is available if you want to run the material after the workshop. If you want to install on your own computer, see instructions [here](https://tidytranscriptomics-workshops.github.io/LoveMangiola2022_tidytranscriptomics/index.html#workshop-package-installation).
 
-Alternatively, you can view the material at the workshop webpage [here](https://tidytranscriptomics-workshops.github.io/iscb2022_tidytranscriptomics/articles/tidytranscriptomics_case_study.html).
+Alternatively, you can view the material at the workshop webpage [here](https://tidytranscriptomics-workshops.github.io/LoveMangiola2022_tidytranscriptomics/articles/tidytranscriptomics_case_study.html).
 
 ## Introduction to tidytranscriptomics
 
 <iframe 
-    src="https://docs.google.com/gview?url=https://raw.githubusercontent.com/tidytranscriptomics-workshops/iscb2022_tidytranscriptomics/master/inst/LoveMangiola2022_tidytranscriptomics.pdf&embedded=true" 
+    src="https://docs.google.com/gview?url=https://raw.githubusercontent.com/tidytranscriptomics-workshops/LoveMangiola2022_tidytranscriptomics/master/inst/LoveMangiola2022_tidytranscriptomics.pdf&embedded=true" 
     scrolling="yes" 
     style="width:100%; height:600px;" 
     frameborder="0">
@@ -66,7 +66,6 @@ Alternatively, you can view the material at the workshop webpage [here](https://
 # Load packages
 library(Seurat)
 library(ggplot2)
-library(plotly)
 library(dplyr)
 library(colorspace)
 library(SeuratWrappers)
@@ -82,7 +81,7 @@ Here we load single-cell data in Seurat object format. This data is peripheral b
 
 ```{r}
 # load single cell RNA sequencing data
-seurat_obj <- iscb2022tidytranscriptomics::seurat_obj
+seurat_obj <- LoveMangiola2022tidytranscriptomics::seurat_obj
 
 # take a look
 seurat_obj
@@ -347,7 +346,7 @@ seurat_obj |>
     UMAP_1, UMAP_2, 
     .size = 0.1, 
     .color =signature_score,
-    gate_list = iscb2022tidytranscriptomics::gate_seurat_obj
+    gate_list = LoveMangiola2022tidytranscriptomics::gate_seurat_obj
   ))
 
 ```
@@ -371,7 +370,7 @@ seurat_obj |>
            scales::rescale(CD8A + CD8B, to=c(0,1))
   ) |>
   
-  mutate(gate = tidygate::gate_int(UMAP_1, UMAP_2, gate_list = iscb2022tidytranscriptomics::gate_seurat_obj)) |> 
+  mutate(gate = tidygate::gate_int(UMAP_1, UMAP_2, gate_list = LoveMangiola2022tidytranscriptomics::gate_seurat_obj)) |> 
   
   filter(gate == 1) 
 ```
@@ -395,7 +394,7 @@ seurat_obj |>
            scales::rescale(CD8A + CD8B, to=c(0,1))
   ) |>
   
-  mutate(gate = tidygate::gate_int(UMAP_1, UMAP_2, gate_list = iscb2022tidytranscriptomics::gate_seurat_obj) ) |> 
+  mutate(gate = tidygate::gate_int(UMAP_1, UMAP_2, gate_list = LoveMangiola2022tidytranscriptomics::gate_seurat_obj) ) |> 
   
   filter(gate == 1) |>
   
@@ -455,11 +454,11 @@ single_cell_object |>
 We'll demonstrate creating a 3D plot using some data that has 3 UMAP dimensions.
 
 ```{r umap plot 2, message = FALSE, warning = FALSE}
-pbmc <- iscb2022tidytranscriptomics::seurat_obj_UMAP3
+pbmc <- LoveMangiola2022tidytranscriptomics::seurat_obj_UMAP3
 
 pbmc |>
     
-  plot_ly(
+  tidyseurat::plot_ly(
     x = ~`UMAP_1`,
     y = ~`UMAP_2`,
     z = ~`UMAP_3`,
@@ -467,7 +466,7 @@ pbmc |>
     colors = dittoSeq::dittoColors()
   ) |> 
   
-   add_markers(size = I(1))
+   plotly::add_markers(size = I(1))
 
 ```
 
@@ -501,8 +500,8 @@ library(tidySummarizedExperiment)
 
 ```{r}
 pseudo_bulk <-
-  sce_obj |>
-  LoveMangiola2022tidytranscriptomics::aggregate_cells(c(sample, cell_type), assays = "counts")
+  seurat_obj |>
+  LoveMangiola2022tidytranscriptomics::aggregate_cells(c(sample, curated_cell_type), assays = "RNA")
 
 pseudo_bulk
 ```
@@ -511,16 +510,33 @@ pseudo_bulk
 
 With `tidySummarizedExperiment` and `tidybulk` it is easy to split the data into groups and perform analyses on each without needing to create separate objects.
 
-```{r, echo=FALSE, out.width = "800px"}
-knitr::include_graphics("../man/figures/new_SE_usage-01.png")
-```
+## Functions/utilities available
+
+| Function                            | Description                                                                        |
+|-------------------------------------|------------------------------------------------------------------------------------|
+| `aggregate_duplicates`              | Aggregate abundance and annotation of duplicated transcripts in a robust way       |
+| `identify_abundant` `keep_abundant` | identify or keep the abundant genes                                                |
+| `keep_variable`                     | Filter for top variable features                                                   |
+| `scale_abundance`                   | Scale (normalise) abundance for RNA sequencing depth                               |
+| `reduce_dimensions`                 | Perform dimensionality reduction (PCA, MDS, tSNE, UMAP)                            |
+| `cluster_elements`                  | Labels elements with cluster identity (kmeans, SNN)                                |
+| `remove_redundancy`                 | Filter out elements with highly correlated features                                |
+| `adjust_abundance`                  | Remove known unwanted variation (Combat)                                           |
+| `test_differential_abundance`       | Differential transcript abundance testing (DESeq2, edgeR, voom)                    |
+| `deconvolve_cellularity`            | Estimated tissue composition (Cibersort, llsr, epic, xCell, mcp_counter, quantiseq |
+| `test_differential_cellularity`     | Differential cell-type abundance testing                                           |
+| `test_stratification_cellularity`   | Estimate Kaplan-Meier survival differences                                         |
+| `test_gene_enrichment`              | Gene enrichment analyses (EGSEA)                                                   |
+| `test_gene_overrepresentation`      | Gene enrichment on list of transcript names (no rank)                              |
+| `test_gene_rank`                    | Gene enrichment on list of transcript (GSEA)                                       |
+| `impute_missing_abundance`          | Impute abundance for missing data points using sample groupings                    |
 
 We use tidyverse `nest` to group the data. The command below will create a tibble containing a column with a SummarizedExperiment object for each cell type. `nest` is similar to tidyverse `group_by`, except with `nest` each group is stored in a single row, and can be a complex object such as a plot or SummarizedExperiment.
 
 ```{r}
 pseudo_bulk_nested <- 
   pseudo_bulk |>
-  nest(grouped_summarized_experiment = -cell_type)
+  nest(grouped_summarized_experiment = -curated_cell_type)
 
 pseudo_bulk_nested
 ```
@@ -537,7 +553,7 @@ We can then identify differentially expressed genes for each cell type for our c
 
 ```{r message=FALSE, warning=FALSE}
 # Differential transcription abundance
-pseudo_bulk <-
+pseudo_bulk_nested <-
     
   pseudo_bulk_nested |>
     
@@ -560,13 +576,13 @@ pseudo_bulk <-
 The output is again a tibble containing a SummarizedExperiment object for each cell type.
 
 ```{r}
-pseudo_bulk
+pseudo_bulk_nested
 ```
 
 If we pull out the SummarizedExperiment object for the first cell type, as before, we can see it now has columns containing the differential expression results (e.g. logFC, PValue).
 
 ```{r}
-pseudo_bulk |>
+pseudo_bulk_nested |>
   slice(1) |>
   pull(grouped_summarized_experiment)
 ```
@@ -574,9 +590,9 @@ pseudo_bulk |>
 It is useful to create plots for significant genes to visualise the transcriptional abundance in the groups being compared (treated and untreated). We can do this for each cell type without needing to create multiple objects. 
 
 ```{r message = FALSE}
-pseudo_bulk <-
+pseudo_bulk_nested <-
     
-  pseudo_bulk |>
+  pseudo_bulk_nested |>
     
   # Filter out significant
   # using a high FDR value as this is toy data
@@ -592,9 +608,9 @@ pseudo_bulk <-
   # Plot significant genes for each cell type
   # map2 is map that accepts 2 input columns (.x, .y) and a function
   mutate(plot = map2(
-    grouped_summarized_experiment, cell_type,
+    grouped_summarized_experiment, curated_cell_type,
     ~ .x |>
-      ggplot(aes(treatment, counts_scaled + 1)) +
+      ggplot(aes(treatment, RNA_scaled + 1)) +
       geom_boxplot(aes(fill = treatment)) +
       geom_jitter() +
       scale_y_log10() +
@@ -606,13 +622,13 @@ pseudo_bulk <-
 The output is a nested table with a column containing a plot for each cell type.
 
 ```{r}
-pseudo_bulk
+pseudo_bulk_nested
 ```
 
 We'll use slice and pull again to have a look at one of the plots.
 
 ```{r}
-pseudo_bulk |>
+pseudo_bulk_nested |>
   slice(1) |>
   pull(plot)
 ```
@@ -620,7 +636,7 @@ pseudo_bulk |>
 We can extract all plots and plot with `wrap_plots` from the patchwork package. 
 
 ```{r, fig.height = 8}
-pseudo_bulk |>
+pseudo_bulk_nested |>
   pull(plot) |>
   wrap_plots() &
   LoveMangiola2022tidytranscriptomics::theme_multipanel
