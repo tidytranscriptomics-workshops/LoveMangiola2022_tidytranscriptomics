@@ -50,5 +50,5 @@ There is a cluster of cells characterised by a low RNA output (nCount_RNA < 100)
 ```{r}
 seurat_obj |>
     filter(nCount_RNA < 100) %>% 
-    count(cell_type)
+    count(curated_cell_type)
 ```
