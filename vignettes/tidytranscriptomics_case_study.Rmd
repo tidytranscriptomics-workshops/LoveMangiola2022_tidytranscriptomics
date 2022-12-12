@@ -38,7 +38,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### Local
 
-We will use the Cloud during the ISCB workshop and this method is available if you want to run the material after the workshop. If you want to install on your own computer, see instructions [here](https://tidytranscriptomics-workshops.github.io/LoveMangiola2022_tidytranscriptomics/index.html#workshop-package-installation).
+We will use the Cloud during the workshop and this method is available if you want to run the material after the workshop. If you want to install on your own computer, see instructions [here](https://tidytranscriptomics-workshops.github.io/LoveMangiola2022_tidytranscriptomics/index.html#workshop-package-installation).
 
 Alternatively, you can view the material at the workshop webpage [here](https://tidytranscriptomics-workshops.github.io/LoveMangiola2022_tidytranscriptomics/articles/tidytranscriptomics_case_study.html).
 
