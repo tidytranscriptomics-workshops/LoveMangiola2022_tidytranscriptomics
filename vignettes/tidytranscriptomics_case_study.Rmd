@@ -68,7 +68,6 @@ library(Seurat)
 library(ggplot2)
 library(dplyr)
 library(colorspace)
-library(SeuratWrappers)
 library(dittoSeq)
 ```
 

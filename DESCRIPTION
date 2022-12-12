@@ -47,7 +47,6 @@ Suggests:
     knitr,
     rmarkdown,
     pkgdown
-Remotes: satijalab/seurat-wrappers
 Biarch: true
 biocViews: RNASeq, DifferentialExpression, GeneExpression, Normalization, Clustering, QualityControl, Sequencing, SingleCell, Transcription, Transcriptomics
 URL: https://tidytranscriptomics-workshops.github.io/LoveMangiola2022_tidytranscriptomics/
