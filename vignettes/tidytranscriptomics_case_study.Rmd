@@ -433,7 +433,7 @@ pbmc |>
 
 # Part 3 Pseudobulk analyses
 
-Next we want to identify genes whose transcription is affected by treatment in this dataset, comparing treated and untreated patients. We can do this with pseudobulk analysis. We aggregate cell-wise transcript abundance into pseudobulk samples and can then perform hypothesis testing using the very well established bulk RNA sequencing tools. For example, we can use edgeR in tidybulk to perform differential expression testing. For more details on pseudobulk analysis see [here](https://hbctraining.github.io/scRNA-seq/lessons/pseudobulk_DESeq2_scrnaseq.html).
+Next we want to identify genes whose transcription is affected by treatment in this dataset, comparing treated and untreated patients. We can do this with pseudobulk analysis. We aggregate cell-wise transcript abundance into pseudobulk samples and can then perform hypothesis testing using the very well established bulk RNA sequencing tools. For example, we can use DESeq2 in tidybulk to perform differential expression testing. For more details on pseudobulk analysis see [here](https://hbctraining.github.io/scRNA-seq/lessons/pseudobulk_DESeq2_scrnaseq.html).
 
 We want to do it for each cell type and the tidy transcriptomics ecosystem makes this very easy. 
 
@@ -519,7 +519,7 @@ pseudo_bulk_nested <-
 			# Removing genes with low expression
 			keep_abundant(factor_of_interest = treatment) |>
 			
-			# Testing for differential expression using edgeR quasi likelihood	
+			# Testing for differential expression using DESeq2	
 			test_differential_abundance(~treatment, method="DESeq2") |> 
 			
 			# Scale abundance for FUTURE visualisation
