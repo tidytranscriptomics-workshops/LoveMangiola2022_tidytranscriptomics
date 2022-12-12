@@ -22,7 +22,6 @@ Imports:
     tidyseurat,
     tidygate,
     Seurat,
-    SeuratWrappers,
     stats,
     utils,
     tibble,
