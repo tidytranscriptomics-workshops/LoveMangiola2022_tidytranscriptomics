@@ -1,4 +1,4 @@
-url: https://tidytranscriptomics-workshops.github.io/iscb2021_tidytranscriptomics
+url: https://tidytranscriptomics-workshops.github.io/LoveMangiola2022_tidytranscriptomics
 
 template:
   params:
@@ -18,8 +18,12 @@ navbar:
   left:
     - text: Workshop
       href: articles/tidytranscriptomics_case_study.html
+    - text: Supplementary 
+      href: articles/supplementary.html
 
   right:
    - icon: fab fa-github
-     href: https://github.com/tidytranscriptomics-workshops/tidygenomics2022_Love_Mangiola
-    
+     href: https://github.com/tidytranscriptomics-workshops/bioc2022_tidytranscriptomics
+   - icon: fab fa-docker
+     href: https://ghcr.io/tidytranscriptomics-workshops/bioc2022_tidytranscriptomics:latest
+     
