@@ -8,7 +8,7 @@ env:
 jobs:
   r-build-and-check:
     runs-on: ubuntu-latest
-    container: bioconductor/bioconductor_docker:RELEASE_3_14
+    container: bioconductor/bioconductor_docker:RELEASE_3_15
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
     steps:
@@ -17,8 +17,10 @@ jobs:
       - name: Query dependencies and update old packages
         run: |
           # We'll install the specific versions from the install instructions
-          BiocManager::install("stemangiola/tidyseurat@v0.5.1")
-          BiocManager::install("stemangiola/tidySingleCellExperiment@v1.3.2")
+          BiocManager::install("stemangiola/tidyseurat@v0.5.4")
+          BiocManager::install("stemangiola/tidySingleCellExperiment@v1.9.1")
+          BiocManager::install("stemangiola/tidybulk@v1.11.1")
+          BiocManager::install("stemangiola/tidySummarizedExperiment@v1.9.2")
           
           # Then install the other dependencies in the usual way
           BiocManager::install(ask=FALSE)
