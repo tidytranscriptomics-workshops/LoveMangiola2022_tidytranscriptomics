@@ -19,6 +19,11 @@ seurat_obj = seurat_obj |>
 			select(sample, type)
 	)  |>
 	mutate(treatment = if_else(type=="MBC", TRUE, FALSE)) |> 
-	select(-sample, -type) 
+	select(-sample, -type) |> 
+	mutate(treatment = factor(treatment))
 
+# Filter ribosome rich
+seurat_obj = seurat_obj |>  filter(curated_cell_type != "CD4+_ribosome_rich")
+
+# Save
 save(seurat_obj , file="data/seurat_obj.rda", compress = "xz")

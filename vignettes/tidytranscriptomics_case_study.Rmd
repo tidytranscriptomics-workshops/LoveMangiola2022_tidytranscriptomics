@@ -19,8 +19,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 *Dr. Stefano Mangiola* is currently a Postdoctoral researcher in the laboratory of Prof. Tony Papenfuss at the Walter and Eliza Hall Institute in Melbourne, Australia. His background spans from biotechnology to bioinformatics and biostatistics. His research focuses on prostate and breast tumour microenvironment, the development of statistical models for the analysis of RNA sequencing data, and data analysis and visualisation interfaces.
 
-*Dr. Maria Doyle* is the Application and Training Specialist for Research Computing at the Peter MacCallum Cancer Centre in Melbourne, Australia. She has a PhD in Molecular Biology and currently works in bioinformatics and data science education and training. She is passionate about supporting researchers, reproducible research, open source and tidy data.
-
 ## Workshop goals and objectives
 
 ### What you will learn
@@ -38,13 +36,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Getting started
 
-### Cloud
-
-Easiest way to run this material. Only available during workshop. Many thanks to the Australian Research Data Commons (ARDC) for providing RStudio in the Australian Nectar Research Cloud and Andy Botting from ARDC for helping to set up.
-
--   Login to one of the servers (e.g. <https://rstudio5.tidytranscriptomics-workshop.cloud.edu.au/rstudio/>) with one of the usernames and passwords from the spreadsheet provided at the workshop. Add your name into the spreadsheet beside the login you're using.
--   Open `tidytranscriptomics_case_study.Rmd` in `LoveMangiola2022_tidytranscriptomcs/vignettes` folder
-
 ### Local
 
 We will use the Cloud during the ISCB workshop and this method is available if you want to run the material after the workshop. If you want to install on your own computer, see instructions [here](https://tidytranscriptomics-workshops.github.io/LoveMangiola2022_tidytranscriptomics/index.html#workshop-package-installation).
@@ -53,11 +44,13 @@ Alternatively, you can view the material at the workshop webpage [here](https://
 
 ## Introduction to tidytranscriptomics
 
+[Here](https://docs.google.com/gview?url=https://raw.githubusercontent.com/tidytranscriptomics-workshops/LoveMangiola2022_tidytranscriptomics/master/inst/LoveMangiola2022_tidytranscriptomics.pdf)
+
 <iframe 
-    src="https://docs.google.com/gview?url=https://raw.githubusercontent.com/tidytranscriptomics-workshops/LoveMangiola2022_tidytranscriptomics/master/inst/LoveMangiola2022_tidytranscriptomics.pdf&embedded=true" 
-    scrolling="yes" 
-    style="width:100%; height:600px;" 
-    frameborder="0">
+src="https://docs.google.com/gview?url=https://raw.githubusercontent.com/tidytranscriptomics-workshops/LoveMangiola2022_tidytranscriptomics/master/inst/LoveMangiola2022_tidytranscriptomics.pdf&embedded=true" 
+scrolling="yes" 
+style="width:100%; height:600px;" 
+frameborder="0">
 </iframe>
 
 # Part 1 Introduction to tidyseurat
@@ -147,28 +140,28 @@ We can use `mutate` to create a column. For example, we could create a new `Phas
 
 ```{r}
 seurat_obj |>
-  mutate(Phase_l=tolower(Phase)) |>
-  
-  # Select columns to view    
-  select(Phase, Phase_l)
+	mutate(Phase_l=tolower(Phase)) |>
+	
+	# Select columns to view    
+	select(.cell, Phase, Phase_l)
 ```
 
 We can use tidyverse commands to polish an annotation column. We will extract the sample, and group information from the file name column into separate columns.
 
 ```{r}
 # First take a look at the file column
-seurat_obj |> select(file)
+seurat_obj |> select(.cell, file)
 ```
 
 ```{r}
 # Create columns for sample and group
 seurat_obj <- seurat_obj |>
-
-# Extract sample and group
-  extract(file, "sample", "../data/.*/([a-zA-Z0-9_-]+)/outs.+", remove = FALSE)
+	
+	# Extract sample and group
+	extract(file, "sample", "../data/.*/([a-zA-Z0-9_-]+)/outs.+", remove = FALSE)
 
 # Take a look
-seurat_obj |> select(sample)
+seurat_obj |> select(.cell, sample)
 ```
 
 We could use tidyverse `unite` to combine columns, for example to create a new column for sample id that combines the sample and patient identifier (BCB) columns. 
@@ -177,7 +170,7 @@ We could use tidyverse `unite` to combine columns, for example to create a new c
 seurat_obj <- seurat_obj |> unite("sample_id", sample, BCB, remove = FALSE)
 
 # Take a look
-seurat_obj |> select(sample_id, sample, BCB)
+seurat_obj |> select(.cell, sample_id, sample, BCB)
 ```
 
 
@@ -214,13 +207,13 @@ With tidyseurat's `join_features` the counts for the genes could be viewed as co
 ```{r}
 
 seurat_obj |>
-  
-  
-  join_features(
-    features = c("CD3D", "TRDC", "TRGC1", "TRGC2", "CD8A", "CD8B"),
-    shape = "wide",
-    assay = "SCT"
-  ) 
+	
+	
+	join_features(
+		features = c("CD3D", "TRDC", "TRGC1", "TRGC2", "CD8A", "CD8B"),
+		shape = "wide",
+		assay = "SCT"
+	) 
 ```
 
 
@@ -229,69 +222,71 @@ They were able to use tidyseurat's `join_features` to select the counts for the 
 ```{r}
 
 seurat_obj |>
-  
-  
-  join_features(
-    features = c("CD3D", "TRDC", "TRGC1", "TRGC2", "CD8A", "CD8B"),
-    shape = "wide",
-    assay = "SCT"
-    
-  ) |>
-  
-  mutate(signature_score =
-           scales::rescale(CD3D + TRDC + TRGC1 + TRGC2, to=c(0,1)) -
-           scales::rescale(CD8A + CD8B, to=c(0,1))
-  ) |>
-  
-  select(signature_score, everything())
+	
+	
+	join_features(
+		features = c("CD3D", "TRDC", "TRGC1", "TRGC2", "CD8A", "CD8B"),
+		shape = "wide",
+		assay = "SCT"
+		
+	) |>
+	
+	mutate(signature_score =
+				 	scales::rescale(CD3D + TRDC + TRGC1 + TRGC2, to=c(0,1)) -
+				 	scales::rescale(CD8A + CD8B, to=c(0,1))
+	) |>
+	
+	select(signature_score, everything())
 ```
 
 The gamma delta T cells could then be visualised by the signature score using Seurat's visualisation functions.
 
-```{r}
+```{r, fig.width=8, fig.height=8}
 
 seurat_obj |>
-  
-  
-  join_features(
-    features = c("CD3D", "TRDC", "TRGC1", "TRGC2", "CD8A", "CD8B"),
-    shape = "wide",
-    assay = "SCT"
-    
-  ) |>
-  
-  mutate(signature_score =
-           scales::rescale(CD3D + TRDC + TRGC1+ TRGC2, to=c(0,1)) -
-           scales::rescale(CD8A + CD8B, to=c(0,1))
-  ) |>
-  
-  Seurat::FeaturePlot(features =  "signature_score", min.cutoff = 0) 
+	
+	
+	join_features(
+		features = c("CD3D", "TRDC", "TRGC1", "TRGC2", "CD8A", "CD8B"),
+		shape = "wide",
+		assay = "SCT"
+		
+	) |>
+	
+	mutate(signature_score =
+				 	scales::rescale(CD3D + TRDC + TRGC1+ TRGC2, to=c(0,1)) -
+				 	scales::rescale(CD8A + CD8B, to=c(0,1))
+	) |>
+	
+	Seurat::FeaturePlot(features =  "signature_score", min.cutoff = 0) 
 ```
 
 The cells could also be visualised using the popular and powerful ggplot package, enabling the researcher to use ggplot functions they were familiar with, and to customise the plot with great flexibility.
 
-```{r}
+```{r, fig.width=8, fig.height=8}
 
 seurat_obj |>
-  
-  
-  join_features(
-    features = c("CD3D", "TRDC", "TRGC1", "TRGC2", "CD8A", "CD8B"),
-    shape = "wide",
-    assay = "SCT"
-    
-  ) |>
-  
-  mutate(signature_score =
-           scales::rescale(CD3D + TRDC + TRGC1+ TRGC2, to=c(0,1)) -
-           scales::rescale(CD8A + CD8B, to=c(0,1))
-  ) |>
-  
-  mutate(signature_score = case_when(signature_score>0 ~ signature_score)) |>
-  ggplot(aes(UMAP_1, UMAP_2, color = signature_score)) +
-  geom_point(shape="." ) +
-  scale_color_continuous_sequential(palette = "Blues", na.value = "grey") + 
-  theme_bw()
+	
+	
+	join_features(
+		features = c("CD3D", "TRDC", "TRGC1", "TRGC2", "CD8A", "CD8B"),
+		shape = "wide",
+		assay = "SCT"
+		
+	) |>
+	
+	mutate(signature_score =
+				 	scales::rescale(CD3D + TRDC + TRGC1+ TRGC2, to=c(0,1)) -
+				 	scales::rescale(CD8A + CD8B, to=c(0,1))
+	) |>
+	
+	# plot cells with high score last so they're not obscured by other cells
+	arrange(signature_score) |>
+	
+	ggplot(aes(UMAP_1, UMAP_2, color = signature_score)) +
+	geom_point(size=0.5) +
+	scale_color_distiller(palette = "Spectral") +
+	LoveMangiola2022tidytranscriptomics::theme_multipanel
 ```
 
 The gamma delta T cells (the blue cluster on the left with high signature score) could be interactively selected from the plot using the tidygate package.
@@ -299,79 +294,49 @@ The gamma delta T cells (the blue cluster on the left with high signature score)
 ```{r eval=FALSE}
 
 seurat_obj |>
-  
-  
-  join_features(
-    features = c("CD3D", "TRDC", "TRGC1", "TRGC2", "CD8A", "CD8B"),
-    shape = "wide",
-    assay = "SCT"
-    
-  ) |>
-  
-  mutate(signature_score =
-           scales::rescale(CD3D + TRDC + TRGC1+ TRGC2, to=c(0,1)) -
-           scales::rescale(CD8A + CD8B, to=c(0,1))
-  ) |>
-
-  mutate(gate = tidygate::gate_int(
-    UMAP_1, UMAP_2, 
-    .size = 0.1, 
-    .color =signature_score
-  ))
-
-```
-
-Here we draw one gate but multiple gates can be drawn.
-
-After the selection we can reload from file the gate drawn for reproducibility.
-
-```{r eval=FALSE}
-
-seurat_obj |>
-  
-  join_features(
-    features = c("CD3D", "TRDC", "TRGC1", "TRGC2", "CD8A", "CD8B"),
-    shape = "wide",
-    assay = "SCT"
-    
-  ) |>
-  
-  mutate(signature_score =
-           scales::rescale(CD3D + TRDC + TRGC1+ TRGC2, to=c(0,1)) -
-           scales::rescale(CD8A + CD8B, to=c(0,1))
-  ) |>
-
-  mutate(gate = tidygate::gate_int(
-    UMAP_1, UMAP_2, 
-    .size = 0.1, 
-    .color =signature_score,
-    gate_list = LoveMangiola2022tidytranscriptomics::gate_seurat_obj
-  ))
+	
+	
+	join_features(
+		features = c("CD3D", "TRDC", "TRGC1", "TRGC2", "CD8A", "CD8B"),
+		shape = "wide",
+		assay = "SCT"
+		
+	) |>
+	
+	mutate(signature_score =
+				 	scales::rescale(CD3D + TRDC + TRGC1+ TRGC2, to=c(0,1)) -
+				 	scales::rescale(CD8A + CD8B, to=c(0,1))
+	) |>
+	
+	mutate(gate = tidygate::gate_int(
+		UMAP_1, UMAP_2, 
+		.size = 0.1, 
+		.color =signature_score
+	)) |> 
+	
+	filter(gate==1)
 
 ```
 
-And the dataset could be filtered for just these cells using tidyverse `filter`.
+For exploratory analyses, we can select the gamma delta T cells, the red cluster on the left with high signature score. We'll filter for cells with a signature score > 0.7.
 
-```{r}
-
-seurat_obj |>
-  
-  
-  join_features(
-    features = c("CD3D", "TRDC", "TRGC1", "TRGC2", "CD8A", "CD8B"),
-    shape = "wide",
-    assay = "SCT"
-    
-  ) |>
-  
-  mutate(signature_score =
-           scales::rescale(CD3D + TRDC + TRGC1+ TRGC2, to=c(0,1)) -
-           scales::rescale(CD8A + CD8B, to=c(0,1))
-  ) |>
-  
-  mutate(gate = tidygate::gate_int(UMAP_1, UMAP_2, gate_list = LoveMangiola2022tidytranscriptomics::gate_seurat_obj)) |> 
-  
-  filter(gate == 1) 
+```{r eval = FALSE}
+sce_obj_gamma_delta <-
+	
+	sce_obj |>
+	
+	join_features(
+		features = c("CD3D", "TRDC", "TRGC1", "TRGC2", "CD8A", "CD8B"), shape = "wide"
+	) |>
+	
+	mutate(
+		signature_score =
+			scales::rescale(CD3D + TRDC + TRGC1 + TRGC2, to = c(0, 1)) -
+			scales::rescale(CD8A + CD8B, to = c(0, 1))
+	) |>
+	
+	# Proper cluster selection should be used instead (see supplementary material)
+	filter(signature_score > 0.7)
 ```
 
 It was then possible to perform analyses on these gamma delta T cells by simply chaining further commands, such as below.
@@ -379,93 +344,84 @@ It was then possible to perform analyses on these gamma delta T cells by simply 
 ```{r eval = FALSE}
 
 seurat_obj |>
-  
-  
-  join_features(
-    features = c("CD3D", "TRDC", "TRGC1", "TRGC2", "CD8A", "CD8B"),
-    shape = "wide",
-    assay = "SCT"
-    
-  ) |>
-  
-  mutate(signature_score =
-           scales::rescale(CD3D + TRDC + TRGC1+ TRGC2, to=c(0,1)) -
-           scales::rescale(CD8A + CD8B, to=c(0,1))
-  ) |>
-  
-  mutate(gate = tidygate::gate_int(UMAP_1, UMAP_2, gate_list = LoveMangiola2022tidytranscriptomics::gate_seurat_obj) ) |> 
-  
-  filter(gate == 1) |>
-  
-  # Reanalyse
-  NormalizeData(assay="RNA") |> 
-  FindVariableFeatures(nfeatures = 100, assay="RNA") |>
-  SplitObject(split.by = "file") |> 
-  RunFastMNN(assay="RNA") |> 
-  RunUMAP(reduction = "mnn", dims = 1:20) |> 
-  FindNeighbors(dims = 1:20, reduction = "mnn") |> 
-  FindClusters(resolution = 0.3)
+	
+	
+	join_features(
+		features = c("CD3D", "TRDC", "TRGC1", "TRGC2", "CD8A", "CD8B"),
+		shape = "wide",
+		assay = "SCT"
+		
+	) |>
+	
+	mutate(signature_score =
+				 	scales::rescale(CD3D + TRDC + TRGC1+ TRGC2, to=c(0,1)) -
+				 	scales::rescale(CD8A + CD8B, to=c(0,1))
+	) |>
+	
+	# Proper cluster selection should be used instead (see supplementary material)
+	filter(signature_score > 0.7) |> 
+	
+	# Reanalysis
+	NormalizeData(assay="RNA") |> 
+	FindVariableFeatures(nfeatures = 100, assay="RNA") |>
+	SplitObject(split.by = "file") |> 
+	RunFastMNN(assay="RNA") |> 
+	RunUMAP(reduction = "mnn", dims = 1:20) |> 
+	FindNeighbors(dims = 1:20, reduction = "mnn") |> 
+	FindClusters(resolution = 0.3)
 ```
 
-For comparison, we show the alternative using base R and Seurat
+For comparison, we show the alternative using base R and SingleCellExperiment. Note that the code contains more redundancy and intermediate objects.
 
-```{r eval = FALSE}
+```{r eval=FALSE}
+counts_positive <-
+	assay(sce_obj, "logcounts")[c("CD3D", "TRDC", "TRGC1", "TRGC2"), ] |>
+	colSums() |>
+	scales::rescale(to = c(0, 1))
 
-counts_positive <- 
-  GetAssayData(seurat_obj, assay="SCT")[c("CD3D", "TRDC", "TRGC1", "TRGC2"),] |> 
-  colSums() |> 
-  scales::rescale(to=c(0,1)) 
+counts_negative <-
+	assay(sce_obj, "logcounts")[c("CD8A", "CD8B"), ] |>
+	colSums() |>
+	scales::rescale(to = c(0, 1))
 
-counts_negative <- 
-  GetAssayData(seurat_obj, assay="SCT")[c("CD8A", "CD8B"),] |> 
-  colSums()  |> 
-  scales::rescale(to=c(0,1)) 
+sce_obj$signature_score <- counts_positive - counts_negative
 
-seurat_obj$signature_score <- counts_positive - counts_negative
+sce_obj_gamma_delta <- sce_obj[, sce_obj$signature_score > 0.7]
 
-p <- FeaturePlot(seurat_obj, features = "signature_score")
-
-# This is not reproducible (in contrast to tidygate)
-seurat_obj$within_gate <- colnames(seurat_obj) %in% CellSelector(plot = p)
-
-seurat_obj |> 
-  subset(within_gate == TRUE) |>
-  
-  # Reanalyse
-  NormalizeData(assay="RNA") |> 
-  FindVariableFeatures(nfeatures = 100, assay="RNA") |>
-  SplitObject(split.by = "file") |> 
-  RunFastMNN(assay="RNA") |> 
-  RunUMAP(reduction = "mnn", dims = 1:20) |> 
-  FindNeighbors(dims = 1:20, reduction = "mnn") |> 
-  FindClusters(resolution = 0.3)
+# Reanalysis
+# ...
 ```
+
+### Interactive plotting
 
 As a final note, it's also possible to do complex and powerful things in a simple way, due to the integration of the tidy transcriptomics packages with the tidy universe. As one example, we can visualise the cells as a 3D plot using plotly. 
- 
+
 The example data we've been using only contains a few genes, for the sake of time and size in this demonstration, but below is how you could generate the 3 dimensions needed for 3D plot with a full dataset.
 
 ```{r eval = FALSE}
 single_cell_object |> 
-  RunUMAP(dims = 1:30, n.components = 3L, spread = 0.5,min.dist  = 0.01, n.neighbors = 10L)
+	RunUMAP(dims = 1:30, n.components = 3L, spread = 0.5,min.dist  = 0.01, n.neighbors = 10L)
 ```
-  
+
 We'll demonstrate creating a 3D plot using some data that has 3 UMAP dimensions.
 
-```{r umap plot 2, message = FALSE, warning = FALSE}
+```{r umap plot 2, message = FALSE, warning = FALSE, fig.width=8, fig.height=8}
 pbmc <- LoveMangiola2022tidytranscriptomics::seurat_obj_UMAP3
 
+# Look at the object
+pbmc |> select(contains("UMAP"), everything())
+
 pbmc |>
-    
-  tidyseurat::plot_ly(
-    x = ~`UMAP_1`,
-    y = ~`UMAP_2`,
-    z = ~`UMAP_3`,
-    color = ~curated_cell_type,
-    colors = dittoSeq::dittoColors()
-  ) |> 
-  
-   plotly::add_markers(size = I(1))
+	
+	tidyseurat::plot_ly(
+		x = ~`UMAP_1`,
+		y = ~`UMAP_2`,
+		z = ~`UMAP_3`,
+		color = ~curated_cell_type,
+		colors = dittoSeq::dittoColors()
+	) |> 
+	
+	plotly::add_markers(size = I(1))
 
 ```
 
@@ -499,8 +455,8 @@ library(tidySummarizedExperiment)
 
 ```{r}
 pseudo_bulk <-
-  seurat_obj |>
-  LoveMangiola2022tidytranscriptomics::aggregate_cells(c(sample, curated_cell_type), assays = "RNA")
+	seurat_obj |>
+	LoveMangiola2022tidytranscriptomics::aggregate_cells(c(sample, curated_cell_type), assays = "RNA")
 
 pseudo_bulk
 ```
@@ -509,7 +465,7 @@ pseudo_bulk
 
 With `tidySummarizedExperiment` and `tidybulk` it is easy to split the data into groups and perform analyses on each without needing to create separate objects.
 
-## Functions/utilities available
+## Tidybulk functions/utilities available
 
 | Function                            | Description                                                                        |
 |-------------------------------------|------------------------------------------------------------------------------------|
@@ -534,8 +490,8 @@ We use tidyverse `nest` to group the data. The command below will create a tibbl
 
 ```{r}
 pseudo_bulk_nested <- 
-  pseudo_bulk |>
-  nest(grouped_summarized_experiment = -curated_cell_type)
+	pseudo_bulk |>
+	nest(grouped_summarized_experiment = -curated_cell_type)
 
 pseudo_bulk_nested
 ```
@@ -544,8 +500,8 @@ To explore the grouping, we can use tidyverse `slice` to choose a row (cell_type
 
 ```{r}
 pseudo_bulk_nested |>
-  slice(1) |>
-  pull(grouped_summarized_experiment)
+	slice(1) |>
+	pull(grouped_summarized_experiment)
 ```
 
 We can then identify differentially expressed genes for each cell type for our condition of interest, treated versus untreated patients. We use tidyverse `map` to apply differential expression functions to each cell type group in the nested data. The result columns will be added to the SummarizedExperiment objects.
@@ -553,23 +509,23 @@ We can then identify differentially expressed genes for each cell type for our c
 ```{r message=FALSE, warning=FALSE}
 # Differential transcription abundance
 pseudo_bulk_nested <-
-    
-  pseudo_bulk_nested |>
-    
-  # map accepts a data column (.x) and a function. It applies the function to each element of the column.
-  mutate(grouped_summarized_experiment = map(
-    grouped_summarized_experiment,
-    ~ .x |>
-        
-      # Removing genes with low expression
-      identify_abundant(factor_of_interest = treatment) |>
-        
-      # Scaling counts for sequencing depth	
-      scale_abundance(method="TMMwsp") |>
-      
-      # Testing for differential expression using edgeR quasi likelihood	
-      test_differential_abundance(~treatment, method="edgeR_quasi_likelihood", scaling_method="TMMwsp")
-  ))
+	
+	pseudo_bulk_nested |>
+	
+	# map accepts a data column (.x) and a function. It applies the function to each element of the column.
+	mutate(grouped_summarized_experiment = map(
+		grouped_summarized_experiment,
+		~ .x |>
+			
+			# Removing genes with low expression
+			keep_abundant(factor_of_interest = treatment) |>
+			
+			# Testing for differential expression using edgeR quasi likelihood	
+			test_differential_abundance(~treatment, method="DESeq2") |> 
+			
+			# Scale abundance for FUTURE visualisation
+			scale_abundance(method="TMMwsp") 
+	))
 ```
 
 The output is again a tibble containing a SummarizedExperiment object for each cell type.
@@ -582,64 +538,67 @@ If we pull out the SummarizedExperiment object for the first cell type, as befor
 
 ```{r}
 pseudo_bulk_nested |>
-  slice(1) |>
-  pull(grouped_summarized_experiment)
+	slice(1) |>
+	pull(grouped_summarized_experiment)
 ```
 
-It is useful to create plots for significant genes to visualise the transcriptional abundance in the groups being compared (treated and untreated). We can do this for each cell type without needing to create multiple objects. 
+We can analyse our nested dataset mapping queries across the `SummarizedExperiment`s
 
 ```{r message = FALSE}
-pseudo_bulk_nested <-
-    
-  pseudo_bulk_nested |>
-    
-  # Filter out significant
-  # using a high FDR value as this is toy data
-  mutate(grouped_summarized_experiment = map(
-  	grouped_summarized_experiment, 
-  	~ filter(.x, FDR < 0.5)
-  )) |>
-    
-  # Filter cell types with no differential abundant gene-transcripts
-  # map_int is map that returns integer instead of list
-  filter(map_int(grouped_summarized_experiment, ~ nrow(.x)) > 0) |>
 
-  # Plot significant genes for each cell type
-  # map2 is map that accepts 2 input columns (.x, .y) and a function
-  mutate(plot = map2(
-    grouped_summarized_experiment, curated_cell_type,
-    ~ .x |>
-      ggplot(aes(treatment, RNA_scaled + 1)) +
-      geom_boxplot(aes(fill = treatment)) +
-      geom_jitter() +
-      scale_y_log10() +
-      facet_wrap(~.feature) +
-      ggtitle(.y)
-  ))
-```
+pseudo_bulk_nested = 
+	pseudo_bulk_nested |>
+	
+	# Identify top significant genes
+	mutate(top_genes = map_chr(
+		grouped_summarized_experiment, 
+		~ .x |> 
+			pivot_transcript() |> 
+			arrange(pvalue) |> 
+			head(1) |> 
+			pull(.feature)
+	)) |> 
+	
+	# Filter top gene
+	mutate(grouped_summarized_experiment = map2(
+		grouped_summarized_experiment, top_genes,
+		~ filter(.x, .feature == .y)
+	)) 
 
-The output is a nested table with a column containing a plot for each cell type.
-
-```{r}
 pseudo_bulk_nested
+
+
 ```
 
-We'll use slice and pull again to have a look at one of the plots.
+Plot top differential genes
 
 ```{r}
-pseudo_bulk_nested |>
-  slice(1) |>
-  pull(plot)
+
+pseudo_bulk_nested = 
+	pseudo_bulk_nested |>
+	
+	# Plot significant genes for each cell type
+	# map2 is map that accepts 2 input columns (.x, .y) and a function
+	mutate(plot = map2(
+		grouped_summarized_experiment,curated_cell_type,
+		~ .x |>
+			
+			# Plot
+			ggplot(aes(treatment, RNA_scaled + 1)) +
+			geom_boxplot(aes(fill = treatment)) +
+			geom_jitter() +
+			scale_y_log10() +
+			facet_wrap(~.feature, ncol = 3) +
+			ggtitle(.y) +
+			LoveMangiola2022tidytranscriptomics::theme_multipanel
+	)) 
+
+pseudo_bulk_nested
+
+pseudo_bulk_nested |> pull(plot) 
+
 ```
 
-We can extract all plots and plot with `wrap_plots` from the patchwork package. 
-
-```{r, fig.height = 8}
-pseudo_bulk_nested |>
-  pull(plot) |>
-  wrap_plots() &
-  LoveMangiola2022tidytranscriptomics::theme_multipanel
-```
 
 **Session Information**
 
