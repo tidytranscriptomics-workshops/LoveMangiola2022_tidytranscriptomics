@@ -5,13 +5,11 @@
 
 # Introduction to Tidy Transcriptomics
 <p float="left">
-<img height="100" width="300" alt="iscbacademy" src="man/figures/ISCBacademy.png"/>
 <img height="100" alt="tidybulk" src="https://github.com/Bioconductor/BiocStickers/blob/master/tidybulk/tidybulk.png?raw=true"/>
 </p>
 
 ## Instructor names and contact information
 
-* Maria Doyle <Maria.Doyle at petermac.org>  
 * Stefano Mangiola <mangiola.s at wehi.edu.au>
 
 ## Syllabus
