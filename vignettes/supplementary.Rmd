@@ -21,7 +21,7 @@ library(dittoSeq)
 library(tidyseurat)
 library(tidygate)
 
-seurat_obj <- bioc2022tidytranscriptomics::seurat_obj
+seurat_obj <- LoveMangiola2022tidytranscriptomics::seurat_obj
 ```
 
 
@@ -66,7 +66,7 @@ seurat_obj |>
     UMAP_1, UMAP_2,
     .size = 0.1,
     .color =signature_score,
-    gate_list = bioc2022tidytranscriptomics::gate_seurat_obj
+    gate_list = LoveMangiola2022tidytranscriptomics::gate_seurat_obj
   ))
 
 ```
@@ -88,7 +88,7 @@ seurat_obj_gamma_delta <-
            scales::rescale(CD8A + CD8B, to=c(0,1))
   ) |>
 
-  mutate(gate = gate_int(UMAP_1, UMAP_2, gate_list = bioc2022tidytranscriptomics::gate_seurat_obj)) |>
+  mutate(gate = gate_int(UMAP_1, UMAP_2, gate_list = LoveMangiola2022tidytranscriptomics::gate_seurat_obj)) |>
 
   filter(gate == 1)
 ```

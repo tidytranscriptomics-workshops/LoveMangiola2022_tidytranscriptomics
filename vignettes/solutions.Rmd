@@ -16,7 +16,7 @@ library(colorspace)
 library(dittoSeq)
 library(tidyseurat)
 
-seurat_obj <- bioc2022tidytranscriptomics::seurat_obj
+seurat_obj <- LoveMangiola2022tidytranscriptomics::seurat_obj
 ```
 
 ## Question 1

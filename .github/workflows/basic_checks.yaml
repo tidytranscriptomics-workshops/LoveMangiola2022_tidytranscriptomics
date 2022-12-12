@@ -2,7 +2,7 @@ on: [push]
 
 env:
   cache-version: v4
-  repo-name: tidytranscriptomics-workshops/bioc2022_tidytranscriptomics
+  repo-name: tidytranscriptomics-workshops/LoveMangiola2022_tidytranscriptomics
 
 jobs:
   r-build-and-check:
