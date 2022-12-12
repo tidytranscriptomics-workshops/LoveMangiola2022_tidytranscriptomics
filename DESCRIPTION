@@ -1,6 +1,6 @@
 Package: LoveMangiola2022tidytranscriptomics
 Title: Introduction to Tidy Transcriptomics
-Version: 0.12.0
+Version: 0.14.0
 Authors@R: c(
     person("Maria", "Doyle", email="maria.doyle@petermac.org",
     role = c("aut"),
@@ -16,7 +16,7 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.1
 Depends:
-    R (>= 4.0.0)
+    R (>= 4.1.0)
 Imports:
     tidySingleCellExperiment,
     tidyseurat,
@@ -53,3 +53,4 @@ biocViews: RNASeq, DifferentialExpression, GeneExpression, Normalization, Cluste
 URL: https://tidytranscriptomics-workshops.github.io/LoveMangiola2022_tidytranscriptomics/
 BugReports: https://github.com/tidytranscriptomics-workshops/LoveMangiola2022_tidytranscriptomics/issues/new/choose
 VignetteBuilder: knitr
+DockerImage: ghcr.io/tidytranscriptomics-workshops/LoveMangiola2022_tidytranscriptomics:latest
