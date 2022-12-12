@@ -34,7 +34,6 @@ Imports:
     forcats,
     ggrepel,
     plotly,
-    uwot,
     igraph,
     broom,
     devtools,

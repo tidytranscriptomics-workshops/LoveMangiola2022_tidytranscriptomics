@@ -19,3 +19,6 @@ seurat_obj_UMAP3 |>
     color = ~curated_cell_type,
     size=0.05
   )
+
+
+seurat_obj_UMAP3 = seurat_obj_UMAP3 |>  filter(curated_cell_type != "CD4+_ribosome_rich")
